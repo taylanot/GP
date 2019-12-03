@@ -14,7 +14,8 @@ from acq_funcs import *
 ################################################################################
 ################################################################################
 # NOTE: if you are observing other peaks in your the plots of acq functions
-# increase your start points
+# increase your start points. You can search the domain by means of starting
+# searching every point in the domain.
 ################################################################################
 def prop(acq, X, GPR, bound, n_restarts = 100):
     dim     = X.shape[1];
