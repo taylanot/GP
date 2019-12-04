@@ -5,4 +5,4 @@
 - To increase the performance try to reduce the number of restarts in acq.func. minimization.
 - Plotting options should be polished it is just a rough visualization.
 - The bounds creation for the minimization is a bit brute try a more elegent solution.
-
+- You could add more acquisation functions to be utilized.
