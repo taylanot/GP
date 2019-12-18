@@ -2,7 +2,7 @@
 ################################################################################
 # NOTE: Finding the Maximum of a Surrogate Function using Expected Improvement
 # Acquisation Function with Stoping Criteria Proposed in [Lorenz et al.]
-# Stopping Criteria for Boosting Automatic Experimental Design... 
+# Stopping Criteria for Boosting Automatic Experimental Design...
 ################################################################################
 # Import General Modules
 import numpy as np

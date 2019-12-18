@@ -32,7 +32,7 @@ def prop(acq, X, GPR, bound, n_restarts = 300):
         for i in range(1,dim):
             bounds = np.vstack((bound,bound));
     def obj(x):
-        return -acq(x.reshape(-1,dim), X, GPR,0.01);
+        return -acq(x.reshape(-1,dim), X, GPR);
     for x0 in np.random.uniform(bound[:,0], bound[:,1], size=(n_restarts,dim)):
         res = minimize(obj, x0=x0, bounds=bounds, method='L-BFGS-B',options={'maxls':50})
         # res.fun   : y value of the minimized function
