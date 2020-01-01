@@ -32,7 +32,7 @@ X_eps   = (abs(bound[:,0]) + abs(bound[:,1])) / 8;
 # Divide Parameter Space
 nbound  = 4;
 ndiv    = nbound-1;
-dbound  = np.linspace(bound[:,0],bound[:,1],4).reshape(1,-1);
+dbound  = np.linspace(bound[:,0],bound[:,1],nbound).reshape(1,-1);
 ################################################################################
 # NOTE: by changing below X to some constant X you get something same for all
 # the runs now it will be arbitrary starting point.
