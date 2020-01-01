@@ -25,13 +25,22 @@ from GP_Plot_Opt    import *
 # np.random.seed(2);                                      # Plant Random Seed
 print 'Sampling points are being generated...'
 # Random Sample Generation
-bound   = np.array([[-1,2]]);
+bound   = np.array([[-1.,2.]]);
+# Stoping Criteria Classification
+PI_eps  = 1E-2;
+X_eps   = (abs(bound[:,0]) + abs(bound[:,1])) / 8;
+# Divide Parameter Space
+nbound  = 4;
+ndiv    = nbound-1;
+dbound  = np.linspace(bound[:,0],bound[:,1],4).reshape(1,-1);
 ################################################################################
 # NOTE: by changing below X to some constant X you get something same for all
 # the runs now it will be arbitrary starting point.
 ################################################################################
-X       = np.random.uniform(bound[:,0],bound[:,1],(2,1))
-y       = -np.sin(3*X) - X**2 + 0.7*X + np.cos(3*X) ;         # Random Sample Targets [nx1]
+X   = np.zeros((ndiv,1));
+for i in range(0,ndiv):
+    X[i]     = np.random.uniform(dbound[:,i],dbound[:,i+1],1);
+y   = -np.sin(3*X) - X**2 + 0.7*X + np.cos(3*X) ;         # Random Sample Targets [nx1]
 #plt.plot(X,y,'o')
 # Grid Creation
 print 'Grid is being generated...'
@@ -71,6 +80,6 @@ for iter in range(1,max_iter):
     EI = Expected_Improvement(x,X,GPR).max();
     PI = Probability_Improvement(x,X,GPR).max();
     print PI
-    if (PI<1E-4 and abs(Euc_dis) >1):
+    if (PI<PI_eps and abs(Euc_dis) > X_eps):
         break;
 plt.show()
