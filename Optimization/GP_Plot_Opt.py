@@ -2,6 +2,9 @@
 # Import General Modules
 import matplotlib.pyplot as plt
 from mpl_toolkits.mplot3d import Axes3D
+plt.matplotlib.rc('xtick', labelsize=12)
+plt.matplotlib.rc('ytick', labelsize=12)
+plt.rcParams.update({'font.size': 16})
 ################################################################################
 # 2D Plotting Option for Optimiation
 ################################################################################
@@ -11,16 +14,19 @@ def GP_2D_Opt(X, y, x, GPR, y_acq, X_next,y_next):
     fig.subplots_adjust(hspace=0)
     # Create the first axis -> Surragete Function
     ax[0].fill_between(x.ravel(), mean.ravel() + 2*std, mean.ravel() - 2*std,
-                    alpha = 0.1,color='m');
-    ax[0].plot(x,mean,label='Surrogate Function',color = 'm');
+                    alpha = 0.2,color='deepskyblue');
+    ax[0].fill_between(x.ravel(), mean.ravel() + std, mean.ravel() - std,
+                    alpha = 0.3,color='deepskyblue');
+    ax[0].plot(x,mean,label='Surrogate Function',color = 'deepskyblue');
     ax[0].plot(X,y,'kx',mew=3, label="Observation");
     ax[0].set_ylabel('Surragete Function');
     ax[0].axvline(x=X_next,ls=':');
-    ax[0].legend();
     # Point Proposition
-    ax[0].plot(X_next,y_next,'x',mew=3,color='maroon');
+    ax[0].plot(X_next,y_next,'x',mew=3,color='maroon',label="Proposed Observation");
+    ax[0].legend();
     # Create the second -> Acquisation Function
     ax[1].set_ylabel('Acqusation Function');
+    ax[1].set_xlabel('Parameter Space');
     ax[1].plot(x,y_acq,label='Acqusation Function',color='midnightblue');
     ax[1].axvline(x=X_next,ls=':');
     ax[1].legend();

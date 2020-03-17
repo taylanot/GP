@@ -6,6 +6,7 @@
 ################################################################################
 # Import General Modules
 import numpy as np
+import random
 import sys;sys.dont_write_bytecode = True;
 # Import Scikit_Learn Modules
 from sklearn.gaussian_process           import GaussianProcessRegressor
@@ -22,7 +23,7 @@ from GP_Plot_Opt    import *
 # to get away from local optimum.
 ################################################################################
 #print 'Seeding...'
-# np.random.seed(2);                                      # Plant Random Seed
+#np.random.seed(2);                                      # Plant Random Seed
 print 'Sampling points are being generated...'
 # Random Sample Generation
 bound   = np.array([[-1.,2.]]);
@@ -39,22 +40,28 @@ dbound  = np.linspace(bound[:,0],bound[:,1],nbound).reshape(1,-1);
 ################################################################################
 X   = np.zeros((ndiv,1));
 for i in range(0,ndiv):
-    X[i]     = np.random.uniform(dbound[:,i],dbound[:,i+1],1);
+    X[i]     = random.uniform(dbound[:,i],dbound[:,i+1]);
+print X
 y   = -np.sin(3*X) - X**2 + 0.7*X + np.cos(3*X) ;         # Random Sample Targets [nx1]
-#plt.plot(X,y,'o')
+plt.plot(X,y,'o',label='First Sample Points')
+#plt.title("Objective Function with Initial Samples")
+plt.xlabel("Parameter-Space")
+plt.ylabel("Target")
+plt.legend()
 # Grid Creation
 print 'Grid is being generated...'
 num     = 100;
 x       = np.linspace(bound[:,0],bound[:,1],num); # Grid Points to Predict [nx1]
 y_plt   = -np.sin(3*x) - x**2 + 0.7*x + np.cos(3*x)
-plt.plot(x,y_plt)
+plt.plot(x,y_plt,label='Objective Function:sin(3x)-x^2+0.7x+cos(3x)')
+plt.legend()
 # Initialize the Gaussian Process Regressor
 ################################################################################
 # NOTE: Chose your kernel wisely it has some serious effects...
 ################################################################################
 print 'Initializing the GP Regressor...'
-kernel  = sig_n(1.)**2 * SE(length_scale = 1.)
-GPR     = GaussianProcessRegressor(kernel = kernel, n_restarts_optimizer = 30);
+kernel  = sig_n(1.)**2 * SE(length_scale = 1.,length_scale_bounds=(1.e-2,1))
+GPR     = GaussianProcessRegressor(kernel = kernel, n_restarts_optimizer = 10);
 # Information regarding optimization: increase to increase accuracy of surragate
 ################################################################################
 # NOTE: As it founds optimum it stays there which causes some convergence issues
@@ -72,7 +79,7 @@ for iter in range(1,max_iter):
     X_next  = prop (Expected_Improvement,X,GPR,bound);
     y_next  = -np.sin(3*X_next) - np.power(X_next,2) + 0.7*X_next + np.cos(3 *X_next)
     Euc_dis = X[-1] - X_next;
-    print Euc_dis;
+    #print Euc_dis;
     # Plotting...
     GP_2D_Opt(X,y,x,GPR,Expected_Improvement(x,X,GPR),X_next,y_next)
     X       = np.vstack((X,X_next));
@@ -80,6 +87,10 @@ for iter in range(1,max_iter):
     EI = Expected_Improvement(x,X,GPR).max();
     PI = Probability_Improvement(x,X,GPR).max();
     print PI
-    if (PI<PI_eps and abs(Euc_dis) > X_eps):
+    if (PI<PI_eps and abs(Euc_dis) > X_eps and iter > 3 or EI == 0):
         break;
+print y.max()
+print y_plt.max()
+prediction = GPR.predict(X)
+print prediction.max()
 plt.show()

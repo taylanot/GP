@@ -2,6 +2,9 @@
 # Import General Modules
 import matplotlib.pyplot as plt
 from mpl_toolkits.mplot3d import Axes3D
+plt.matplotlib.rc('xtick', labelsize=12)
+plt.matplotlib.rc('ytick', labelsize=12)
+plt.rcParams.update({'font.size': 16})
 ################################################################################
 # 3D Plotting Option for GP
 ################################################################################
@@ -26,10 +29,13 @@ def GP_3D_Surrogate(X,y,x1,x2,mean,std=None):
 ################################################################################
 def GP_2D_Surrogate(X, y, x, mean, std):
     plt.fill_between(x.ravel(),mean.ravel() + 2 * std,mean.ravel() - 2 * std,
-                                alpha=0.1,color='m');
-    plt.plot(x,mean,label='Surrogate-Function',color='m')
-    plt.plot(X,y,'o',color='orange',alpha=1,label='Sample Points')
+                                alpha=0.2,color='deepskyblue');
+    plt.fill_between(x.ravel(),mean.ravel() + 1 * std,mean.ravel() - 1 * std,
+                                alpha=0.3,color='deepskyblue');
+
+    plt.plot(x,mean,label='Surrogate-Function',color='deepskyblue')
+    plt.plot(X,y,'o',markersize=6,color='deepskyblue',alpha=1,label='Sample Points')
     plt.xlabel('X')
     plt.ylabel('y')
     plt.title('2D GP Regression')
-    plt.legend()
+    #plt.legend()

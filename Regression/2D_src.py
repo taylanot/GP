@@ -5,6 +5,7 @@ import sys;sys.dont_write_bytecode = True;
 # Import Scikit_Learn Modules
 from sklearn.gaussian_process import GaussianProcessRegressor
 from sklearn.gaussian_process.kernels import RBF as SE
+from sklearn.gaussian_process.kernels import Matern as M
 from sklearn.gaussian_process.kernels import ConstantKernel as sig_n
 # Import Homemade Modules
 from GP_Plot_Reg import *
@@ -14,15 +15,15 @@ np.random.seed(10);                                      # Plant Random Seed
 print 'Sampling points are being generated...'
 # Random Sample Generation
 bound   = np.array([[-1,1]]);
-X       = np.random.uniform(bound[:,0],bound[:,1], (3,1));            # Random Sample Points  [nx1]
-y       = np.exp(X) + np.sin(3.*X) + 0.7*X + np.random.randn(1);      # Random Sample Targets [nx1]
+X       = np.random.uniform(bound[:,0],bound[:,1], (5,1));            # Random Sample Points  [nx1]
+y       = np.exp(X) + np.sin(3.*X) + 0.7*X + np.cos(4.*X);      # Random Sample Targets [nx1]
 # Grid Creation
 print 'Grid is being generated...'
-num     = 50;
+num     = 100;
 x       = np.linspace(bound[:,0],bound[:,1],num).reshape(-1,1); # Grid Points to Predict [nx1]
 print 'Initializing GP Regressor...'
 # Initialize the Gaussian Process Regressor
-kernel  = sig_n(1.)**2 * SE(length_scale = [5]);
+kernel  = sig_n(1.)**2 * SE(length_scale = [5])
 GPR     = GaussianProcessRegressor(kernel = kernel, n_restarts_optimizer = 20);
 # Imposing Sampling Points for Inference
 print 'Imposing sampling points...'
